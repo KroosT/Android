@@ -34,11 +34,21 @@ public class MainActivity extends AppCompatActivity {
     public void BtnSubscribeClick(View v) {
         LinearLayout chb_layout = (LinearLayout) findViewById(R.id.chb_layout);
         Editable checkBoxText = ((EditText) findViewById(R.id.name_entry)).getText();
-        ((EditText) findViewById(R.id.email_entry)).setText("");
-        ((EditText) findViewById(R.id.name_entry)).setText("");
-        CreateCheckBoxes(chb_layout, count, checkBoxText, false);
-        count++;
-        Toast.makeText(this, "Subscribe activated successfully!", Toast.LENGTH_SHORT).show();
+        Editable checkBoxEmail = ((EditText) findViewById(R.id.email_entry)).getText();
+        if (!"".equals(checkBoxText.toString()) && !"".equals(checkBoxEmail.toString())) {
+            ((EditText) findViewById(R.id.email_entry)).setText("");
+            ((EditText) findViewById(R.id.name_entry)).setText("");
+            CreateCheckBoxes(chb_layout, count, checkBoxText, false);
+            count++;
+            Toast.makeText(this, String.format("E-mail %s successfully subscribed!", checkBoxEmail),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            if ("".equals(checkBoxText.toString())) {
+                Toast.makeText(this, "Incorrect name!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Incorrect email!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void CreateCheckBoxes(LinearLayout chb_layout, int id, Editable checkBoxText,
