@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Subscribe form</string>
+    <string name="name_entry">Enter your name here:</string>
+    <string name="name_entry_hint">Your name</string>
+    <string name="email_entry">Enter your email here:</string>
+    <string name="email_entry_hint">Your email</string>
+    <string name="buttonSubscribe">Subscribe</string>
+</resources>

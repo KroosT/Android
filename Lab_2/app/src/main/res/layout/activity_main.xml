@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.anton.subscribetable.MainActivity">
+
+    <TextView
+        android:id="@+id/name_entry_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name_entry"
+        android:textColor="@color/nameEntryLabelColor"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"/>
+
+    <EditText
+        android:id="@+id/name_entry"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/name_entry_label"
+        android:inputType="textCapWords"
+        android:hint="@string/name_entry_hint"
+        android:background="@drawable/edittextstyle"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/email_entry_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_entry"
+        android:text="@string/email_entry"
+        android:textColor="@color/nameEntryLabelColor"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        android:layout_marginTop="5dp" />
+
+    <EditText
+        android:id="@+id/email_entry"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/email_entry_label"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email_entry_hint"
+        android:background="@drawable/edittextstyle"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/buttonSubscribe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_entry"
+        android:text="@string/buttonSubscribe"
+        android:background="@color/buttonSubscribeColor"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:onClick="BtnSubscribeClick"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/buttonSubscribe">
+        <LinearLayout
+            android:id="@+id/chb_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
