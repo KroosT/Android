@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/email_entry"
         android:text="@string/buttonSubscribe"
-        android:background="@color/buttonSubscribeColor"
+        android:background="@drawable/buttonstyle"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
         android:onClick="BtnSubscribeClick"/>
