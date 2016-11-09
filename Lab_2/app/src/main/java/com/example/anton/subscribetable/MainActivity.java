@@ -12,8 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,8 +19,10 @@ public class MainActivity extends AppCompatActivity {
 
     int count = 0;
     ArrayList<String> checkBoxesTextTemp;
+    ArrayList<String> checkBoxesEmailTemp;
     boolean[] checkBoxesStateTemp;
     ArrayList<String> checkBoxesText = new ArrayList<>();
+    ArrayList<String> checkBoxesEmail= new ArrayList<>();
     boolean[] checkBoxesState = new boolean[0];
 
     @Override
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         if (!"".equals(checkBoxText.toString()) && !"".equals(checkBoxEmail.toString())) {
             ((EditText) findViewById(R.id.email_entry)).setText("");
             ((EditText) findViewById(R.id.name_entry)).setText("");
-            CreateCheckBoxes(chb_layout, count, checkBoxText, false);
+            CreateCheckBoxes(chb_layout, count, checkBoxText, checkBoxEmail, false);
             count++;
             Toast.makeText(this, String.format("E-mail %s successfully subscribed!", checkBoxEmail),
                     Toast.LENGTH_SHORT).show();
@@ -52,12 +52,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CreateCheckBoxes(LinearLayout chb_layout, int id, Editable checkBoxText,
-                                 boolean state) {
+                                 Editable checkBoxEmail, boolean state) {
         CheckBox checkBox = new CheckBox(getApplicationContext());
         registerForContextMenu(checkBox);
         checkBox.setText(checkBoxText);
         checkBox.setChecked(state);
         checkBox.setId(id);
+        checkBoxesEmail.add(checkBoxEmail.toString());
         checkBoxesText.add(checkBoxText.toString());
         checkBoxesState = Arrays.copyOf(checkBoxesState, checkBoxesState.length + 1);
         checkBoxesState[id] = checkBox.isChecked();
@@ -78,12 +79,14 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt("count", count);
         outState.putStringArrayList("chb_text", checkBoxesText);
         outState.putBooleanArray("chb_state", checkBoxesState);
+        outState.putStringArrayList("chb_email", checkBoxesEmail);
         super.onSaveInstanceState(outState);
     }
 
     protected void onRestoreInstanceState(Bundle saveInstanceState) {
         super.onRestoreInstanceState(saveInstanceState);
         count = saveInstanceState.getInt("count");
+        checkBoxesEmail = saveInstanceState.getStringArrayList("chb_email");
         checkBoxesState = saveInstanceState.getBooleanArray("chb_state");
         checkBoxesText = saveInstanceState.getStringArrayList("chb_text");
         if (checkBoxesText != null) {
@@ -92,11 +95,18 @@ public class MainActivity extends AppCompatActivity {
         if (checkBoxesState != null) {
             checkBoxesStateTemp = checkBoxesState;
         }
+        if (checkBoxesEmail != null) {
+            checkBoxesEmailTemp = checkBoxesEmail;
+        }
+
+        checkBoxesEmail = new ArrayList<>();
         checkBoxesState = new boolean[0];
         checkBoxesText = new ArrayList<>();
+
         for (int i = 0 ; i < count; i++) {
             CreateCheckBoxes((LinearLayout) findViewById(R.id.chb_layout), i,
-                    new SpannableStringBuilder(checkBoxesTextTemp.get(i)), checkBoxesStateTemp[i]);
+                    new SpannableStringBuilder(checkBoxesTextTemp.get(i)),
+                    new SpannableStringBuilder(checkBoxesEmailTemp.get(i)), checkBoxesStateTemp[i]);
         }
     }
 
@@ -110,31 +120,47 @@ public class MainActivity extends AppCompatActivity {
         chb_layout.removeAllViews();
         boolean[] temp = new boolean[0];
         ArrayList<String> temp_text = new ArrayList<>();
+        ArrayList<String> temp_email = new ArrayList<>();
+        ArrayList<String> unsubscribed_emails = new ArrayList<>();
+
         for (int i = 0; i < checkBoxesState.length; i++) {
             if (checkBoxesState[i]) {
                 count--;
+                unsubscribed_emails.add(checkBoxesEmail.get(i));
             } else {
                 temp = Arrays.copyOf(temp, temp.length + 1);
                 temp[temp.length - 1] = checkBoxesState[i];
                 temp_text.add(checkBoxesText.get(i));
+                temp_email.add(checkBoxesEmail.get(i));
             }
         }
 
         checkBoxesState = temp;
         checkBoxesText = temp_text;
+        checkBoxesEmail = temp_email;
 
         checkBoxesTextTemp = checkBoxesText;
         checkBoxesStateTemp = checkBoxesState;
+        checkBoxesEmailTemp = checkBoxesEmail;
 
         checkBoxesState = new boolean[0];
         checkBoxesText = new ArrayList<>();
+        checkBoxesEmail = new ArrayList<>();
 
         for (int i = 0; i < checkBoxesStateTemp.length; i++) {
             CreateCheckBoxes(chb_layout, i, new SpannableStringBuilder(checkBoxesTextTemp.get(i)),
-                    checkBoxesStateTemp[i]);
+                    new SpannableStringBuilder(checkBoxesEmailTemp.get(i)), checkBoxesStateTemp[i]);
         }
 
-        Toast.makeText(this, "Subscribe deactivated successfully!", Toast.LENGTH_SHORT).show();
+        if (unsubscribed_emails.size() == 1) {
+            Toast.makeText(this, String.format("E-mail %s unsubscribed successfully successfully!",
+                    unsubscribed_emails.get(0)), Toast.LENGTH_SHORT).show();
+        } else if (unsubscribed_emails.size() > 1) {
+            Toast.makeText(this, "E-mails unsubscribed successfully successfully!",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Nothing selected!", Toast.LENGTH_SHORT).show();
+        }
         return super.onContextItemSelected(item);
     }
 
